@@ -1,41 +1,42 @@
 import Image from "next/image";
 import Link from "next/link";
+import styles from "./nav.module.css";
 
 export default function Nav() {
     return (
-        <nav className="main__nav">
-            <div className="nav__logo">
+        <nav className={styles.nav}>
+            <div className={styles.logo}>
                 <Image
                     width={250}
                     height={170}
-                    className="logo__image"
+                    className={styles.logoImage}
                     src="/img/logo.png"
                     alt="logo"
                 />
             </div>
 
-            <div className="nav__burger">
-                <span className="burger__line"></span>
-                <span className="burger__line"></span>
-                <span className="burger__line"></span>
+            <div className={styles.burger}>
+                <span className={styles.burgerLine}></span>
+                <span className={styles.burgerLine}></span>
+                <span className={styles.burgerLine}></span>
             </div>
 
-            <div className="nav__menu">
-                <ul className="menu__list">
-                    <li className="menu__item">
-                        <Link href="#" className="menu__link">
+            <div className={styles.menu}>
+                <ul className={styles.menuList}>
+                    <li className={styles.menuItem}>
+                        <Link href="#" className={styles.menuLink}>
                             Главное
                         </Link>
                     </li>
 
-                    <li className="menu__item">
-                        <Link href="#" className="menu__link">
+                    <li className={styles.menuItem}>
+                        <Link href="#" className={styles.menuLink}>
                             Мой плейлист
                         </Link>
                     </li>
 
-                    <li className="menu__item">
-                        <Link href="../signin.html" className="menu__link">
+                    <li className={styles.menuItem}>
+                        <Link href="../signin.html" className={styles.menuLink}>
                             Войти
                         </Link>
                     </li>
