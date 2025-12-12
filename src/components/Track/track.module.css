@@ -1,0 +1,53 @@
+.item {
+    margin-bottom: 12px;
+}
+
+.track {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    width: 447px;
+}
+
+.image {
+    width: 51px;
+    height: 51px;
+    background: #313131;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 17px;
+}
+
+.svg {
+    width: 18px;
+    height: 17px;
+    stroke: #4e4e4e;
+    fill: transparent;
+}
+
+.name {
+    color: #fff;
+    font-size: 16px;
+}
+
+.author {
+    width: 321px;
+    color: #fff;
+}
+
+.album {
+    width: 245px;
+    color: #696969;
+}
+
+.time {
+    width: 60px;
+    text-align: right;
+    color: #696969;
+}
