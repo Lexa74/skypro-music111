@@ -5,7 +5,7 @@ import React from "react";
 
 const montserrat = Montserrat({
     variable: '--font-montserrat',
-    subsets: ['latin'],
+    subsets: ['latin', 'cyrillic'],
     weight: ['400', '500', '700'],
     display: 'swap',
 });
