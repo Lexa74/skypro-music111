@@ -1,4 +1,5 @@
 "use client";
+
 import styles from "./search.module.css";
 import React, {useState} from "react";
 

@@ -5,6 +5,7 @@ import styles from "./sidebar.module.css";
 export default function Sidebar() {
     return (
         <div className={styles.sidebar}>
+
             {/* PERSONAL BLOCK */}
             <div className={styles.personal}>
                 <p className={styles.personalName}>Sergey.Ivanov</p>

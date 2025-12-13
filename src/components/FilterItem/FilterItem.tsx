@@ -2,13 +2,36 @@ import styles from "./filterItem.module.css";
 
 type filterItemProps = {
     label: string;
+    isOpen: boolean;
+    onClick: () => void;
+    items: (string | number)[];
 };
 
-export default function FilterItem({ label }: filterItemProps) {
+export default function FilterItem({label, isOpen, onClick, items}: filterItemProps) {
     return (
-        <button className={styles.button}>
-            {label}
-        </button>
+
+        <div className={styles.wrapper}>
+            <button
+                className={`${styles.button} ${isOpen ? styles.active : ""}`}
+                onClick={onClick}
+            >
+                {label}
+                {isOpen && (
+                    <span className={styles.count}>{items.length}</span>
+                )}
+            </button>
+
+            {isOpen && (
+                <div className={styles.dropdown}>
+                    <ul className={styles.list}>
+                        {items.map(item => (
+                            <li key={item} className={styles.item}>
+                                {item}</li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+        </div>
     );
 }
 
