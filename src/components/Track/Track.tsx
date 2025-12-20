@@ -1,21 +1,44 @@
+"use client";
+
 import Link from "next/link";
 import styles from "./track.module.css";
 import { formatTime } from "@utils/helper";
 import { Track as TrackType } from "@/sharedTypes/track";
+import { setCurrentTrack } from "@/store/features/trackSlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import classNames from "classnames";
 
 type Props = {
     track: TrackType;
 };
 
 export default function Track({ track }: Props) {
+    const dispatch = useAppDispatch();
+    const { currentTrack, isPlaying } = useAppSelector(state => state.tracks);
+
+    const isActive =
+        currentTrack?._id === track._id && isPlaying;
+    const isPlayingNow = isActive && isPlaying;
+
     return (
-        <div className={styles.item}>
+        <div
+            className={styles.item}
+            onClick={() => dispatch(setCurrentTrack(track))}>
             <div className={styles.track}>
                 <div className={styles.title}>
                     <div className={styles.image}>
-                        <svg className={styles.svg}>
-                            <use xlinkHref="/img/icon/sprite.svg#icon-note"></use>
-                        </svg>
+
+                        {isActive ? (
+                            <div
+                                className={classNames(styles.dot, {
+                                    [styles.pulse]: isPlayingNow,
+                                })}
+                            />
+                        ) : (
+                            <svg className={styles.svg}>
+                                <use xlinkHref="/img/icon/sprite.svg#icon-note" />
+                            </svg>
+                        )}
                     </div>
 
                     <Link href="#" className={styles.name}>
@@ -23,14 +46,8 @@ export default function Track({ track }: Props) {
                     </Link>
                 </div>
 
-                <div className={styles.author}>
-                    <Link href="#">{track.author}</Link>
-                </div>
-
-                <div className={styles.album}>
-                    <Link href="#">{track.album}</Link>
-                </div>
-
+                <div className={styles.author}>{track.author}</div>
+                <div className={styles.album}>{track.album}</div>
                 <div className={styles.time}>
                     {formatTime(track.duration_in_seconds)}
                 </div>

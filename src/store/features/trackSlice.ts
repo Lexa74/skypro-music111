@@ -3,10 +3,12 @@ import {Track} from "@/sharedTypes/track";
 
 type initialStateType = {
     currentTrack: null | Track;
+    isPlaying: boolean;
 }
 
 const initialState: initialStateType = {
   currentTrack: null,
+    isPlaying: false,
 }
 
 const trackSlice = createSlice({
@@ -15,9 +17,14 @@ const trackSlice = createSlice({
     reducers: {
         setCurrentTrack: (state, action: PayloadAction<Track>) => {
             state.currentTrack = action.payload;
+            state.isPlaying = true;
         },
+        setIsPlaying: (state, action: PayloadAction<boolean>) => {
+            state.isPlaying = action.payload;
+        }
     },
 });
 
 export const {setCurrentTrack} = trackSlice.actions;
 export const trackSliceReducer = trackSlice.reducer;
+export const {setIsPlaying} = trackSlice.actions;
