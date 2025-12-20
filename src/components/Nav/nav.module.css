@@ -18,6 +18,10 @@
     height: 17px;
 }
 
+.burger:hover .burgerLine {
+    background-color: #ffffff;
+}
+
 .burger {
     width: 20px;
     height: 36px;
@@ -37,31 +41,6 @@
     background-color: #d3d3d3;
     transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     transform-origin: center;
-}
-
-.burger:hover .burgerLine:nth-child(1) {
-    transform: translateY(1px) scaleX(0.9);
-}
-.burger:hover .burgerLine:nth-child(2) {
-    transform: scaleX(1.1);
-}
-.burger:hover .burgerLine:nth-child(3) {
-    transform: translateY(-1px) scaleX(0.9);
-}
-
-.burgerActive .burgerLine:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 6px);
-    background-color: #ffffff;
-}
-
-.burgerActive .burgerLine:nth-child(2) {
-    opacity: 0;
-    transform: scaleX(0);
-}
-
-.burgerActive .burgerLine:nth-child(3) {
-    transform: rotate(-45deg) translate(6px, -6px);
-    background-color: #ffffff;
 }
 
 .menuWrapper {
@@ -107,5 +86,5 @@
 }
 
 .menuLink:hover {
-    color: #1ed760;
+    color: #B672FF;
 }
