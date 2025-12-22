@@ -1,109 +1,103 @@
+"use client";
+
 import Link from "next/link";
 import styles from "./bar.module.css";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { useEffect, useRef } from "react";
+import { setIsPlaying } from "@/store/features/trackSlice";
 
 export default function Bar() {
+    const currentTrack = useAppSelector(state => state.tracks.currentTrack);
+    const isPlaying = useAppSelector(state => state.tracks.isPlaying);
+    const dispatch = useAppDispatch();
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+
+    useEffect(() => {
+        if (!audioRef.current || !currentTrack) return;
+
+        audioRef.current.src = currentTrack.track_file;
+        audioRef.current.play().then(r => {});
+        dispatch(setIsPlaying(true));
+    }, [currentTrack, dispatch]);
+
+    if (!currentTrack) return null;
+
+    const togglePlay = () => {
+        if (!audioRef.current) return;
+
+        if (isPlaying) {
+            audioRef.current.pause();
+            dispatch(setIsPlaying(false));
+        } else {
+            audioRef.current.play();
+            dispatch(setIsPlaying(true));
+        }
+    };
+
     return (
         <div className={styles.bar}>
-            <div className={styles.content}>
+            <audio ref={audioRef} hidden />
 
+            <div className={styles.content}>
                 <div className={styles.playerProgress}></div>
 
                 <div className={styles.playerBlock}>
-
-                    {/* LEFT PLAYER SIDE */}
                     <div className={styles.player}>
                         <div className={styles.controls}>
+                            <div className={styles.btnPrev} />
 
-                            <div className={styles.btnPrev}>
-                                <svg className={styles.btnPrevSvg}>
-                                    <use xlinkHref="/img/icon/sprite.svg#icon-prev"></use>
-                                </svg>
-                            </div>
-
-                            <div className={styles.btnPlay}>
+                            <div className={styles.btnPlay} onClick={togglePlay}>
                                 <svg className={styles.btnPlaySvg}>
-                                    <use xlinkHref="/img/icon/sprite.svg#icon-play"></use>
+                                    <use
+                                        xlinkHref={`/img/icon/sprite.svg#icon-${isPlaying ? "pause" : "play"}`}
+                                    />
                                 </svg>
                             </div>
 
-                            <div className={styles.btnNext}>
-                                <svg className={styles.btnNextSvg}>
-                                    <use xlinkHref="/img/icon/sprite.svg#icon-next"></use>
-                                </svg>
-                            </div>
-
-                            <div className={styles.btnRepeat}>
-                                <svg className={styles.btnRepeatSvg}>
-                                    <use xlinkHref="/img/icon/sprite.svg#icon-repeat"></use>
-                                </svg>
-                            </div>
-
-                            <div className={styles.btnShuffle}>
-                                <svg className={styles.btnShuffleSvg}>
-                                    <use xlinkHref="/img/icon/sprite.svg#icon-shuffle"></use>
-                                </svg>
-                            </div>
+                            <div className={styles.btnNext} />
                         </div>
 
-                        {/* TRACK INFO */}
                         <div className={styles.trackPlay}>
                             <div className={styles.trackContain}>
                                 <div className={styles.trackImage}>
                                     <svg className={styles.trackSvg}>
-                                        <use xlinkHref="/img/icon/sprite.svg#icon-note"></use>
+                                        <use xlinkHref="/img/icon/sprite.svg#icon-note" />
                                     </svg>
                                 </div>
 
                                 <div className={styles.trackAuthor}>
-                                    <Link className={styles.trackAuthorLink} href="">
-                                        Ты та...
+                                    <Link className={styles.trackAuthorLink} href="#">
+                                        {currentTrack.author}
                                     </Link>
                                 </div>
 
                                 <div className={styles.trackAlbum}>
-                                    <Link className={styles.trackAlbumLink} href="">
-                                        Баста
+                                    <Link className={styles.trackAlbumLink} href="#">
+                                        {currentTrack.name}
                                     </Link>
-                                </div>
-                            </div>
-
-                            {/* LIKE / DISLIKE */}
-                            <div className={styles.likeBlock}>
-                                <div className={styles.like}>
-                                    <svg className={styles.likeSvg}>
-                                        <use xlinkHref="/img/icon/sprite.svg#icon-like"></use>
-                                    </svg>
-                                </div>
-
-                                <div className={styles.dislike}>
-                                    <svg className={styles.dislikeSvg}>
-                                        <use xlinkHref="/img/icon/sprite.svg#icon-dislike"></use>
-                                    </svg>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* VOLUME */}
                     <div className={styles.volumeBlock}>
                         <div className={styles.volumeContent}>
-
-                            <div className={styles.volumeImage}>
-                                <svg className={styles.volumeSvg}>
-                                    <use xlinkHref="/img/icon/sprite.svg#icon-volume"></use>
-                                </svg>
-                            </div>
-
                             <div className={styles.volumeProgress}>
                                 <input
-                                    className={styles.volumeLine}
                                     type="range"
-                                    name="range"
+                                    className={styles.volumeLine}
+                                    min={0}
+                                    max={1}
+                                    step={0.01}
+                                    onChange={e => {
+                                        if (audioRef.current) {
+                                            audioRef.current.volume = Number(e.target.value);
+                                        }
+                                    }}
                                 />
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>

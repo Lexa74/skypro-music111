@@ -21,7 +21,7 @@ export default function Nav() {
             </div>
 
             <div
-                className={`${styles.burger} ${isOpen ? styles.burgerActive : ''}`}
+                className={styles.burger}
                 onClick={() => setIsOpen(prev => !prev)}
             >
                 <span className={styles.burgerLine}></span>
