@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import styles from "./bar.module.css";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { useEffect, useRef } from "react";
-import { setIsPlaying } from "@/store/features/trackSlice";
+import {useAppDispatch, useAppSelector} from "@/store/hooks";
+import {useEffect, useRef, useState} from "react";
+import {setIsPlaying, toggleRepeat, toggleShuffle} from "@/store/features/trackSlice";
 
 export default function Bar() {
     const currentTrack = useAppSelector(state => state.tracks.currentTrack);
@@ -12,13 +12,28 @@ export default function Bar() {
     const dispatch = useAppDispatch();
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
+    const isRepeat = useAppSelector(state => state.tracks.isRepeat);
+    const isShuffle = useAppSelector(state => state.tracks.isShuffle);
+
+
     useEffect(() => {
         if (!audioRef.current || !currentTrack) return;
 
         audioRef.current.src = currentTrack.track_file;
-        audioRef.current.play().then(r => {});
-        dispatch(setIsPlaying(true));
-    }, [currentTrack, dispatch]);
+
+        if (isPlaying) {
+            audioRef.current.play().catch(() => {
+            });
+        } else {
+            audioRef.current.pause();
+        }
+    }, [currentTrack, isPlaying]);
+
+    useEffect(() => {
+        if (!audioRef.current) return;
+        audioRef.current.loop = isRepeat;
+    }, [isRepeat]);
+
 
     if (!currentTrack) return null;
 
@@ -29,14 +44,14 @@ export default function Bar() {
             audioRef.current.pause();
             dispatch(setIsPlaying(false));
         } else {
-            audioRef.current.play();
+            audioRef.current.play().catch(() => {});
             dispatch(setIsPlaying(true));
         }
     };
 
     return (
         <div className={styles.bar}>
-            <audio ref={audioRef} hidden />
+            <audio ref={audioRef} hidden/>
 
             <div className={styles.content}>
                 <div className={styles.playerProgress}></div>
@@ -45,29 +60,37 @@ export default function Bar() {
                     <div className={styles.player}>
                         <div className={styles.controls}>
 
-                            <div className={styles.btnPrev}>
-                                <img className={styles.iconBtnSvg} src="/img/icon/prev.svg" alt="Previous" />
-                            </div>
+                            <button className={styles.btnPrev}>
+                                <img className={styles.iconBtnSvg} src="/img/icon/prev.svg" alt="Previous"/>
+                            </button>
 
-                            <div className={styles.btnPlay} onClick={togglePlay}>
+                            <button className={styles.btnPlay} onClick={togglePlay}>
                                 <svg className={styles.btnPlaySvg}>
                                     <use
                                         xlinkHref={`/img/icon/sprite.svg#icon-${isPlaying ? "pause" : "play"}`}
                                     />
                                 </svg>
-                            </div>
+                            </button>
 
-                            <div className={styles.btnNext}>
-                                <img className={styles.iconBtnSvg} src="/img/icon/next.svg" alt="Next" />
-                            </div>
+                            <button className={styles.btnNext}>
+                                <img className={styles.iconBtnSvg} src="/img/icon/next.svg" alt="Next"/>
+                            </button>
 
-                            <div className={styles.btnRepeat}>
-                                <img className={styles.iconBtnSvg} src="/img/icon/repeat.svg" alt="Repeat" />
-                            </div>
+                            <button className={styles.btnRepeat}
+                                 onClick={() => dispatch(toggleRepeat())}
+                                 aria-pressed={isRepeat}
+                                 title={isRepeat ? "Repeat: ON" : "Repeat: OFF"}
+                            >
+                                <img className={styles.iconBtnSvg} src="/img/icon/repeat.svg" alt="Repeat"/>
+                            </button>
 
-                            <div className={styles.btnShuffle}>
-                                <img className={styles.iconBtnSvg} src="/img/icon/shuffle.svg" alt="Shuffle" />
-                            </div>
+                            <button className={styles.btnShuffle}
+                                 onClick={() => dispatch(toggleShuffle())}
+                                 aria-pressed={isShuffle}
+                                 title={isShuffle ? "Shuffle: ON" : "Shuffle: OFF"}
+                            >
+                                <img className={styles.iconBtnSvg} src="/img/icon/shuffle.svg" alt="Shuffle"/>
+                            </button>
 
                         </div>
 
@@ -75,7 +98,7 @@ export default function Bar() {
                             <div className={styles.trackContain}>
                                 <div className={styles.trackImage}>
                                     <svg className={styles.trackSvg}>
-                                        <use xlinkHref="/img/icon/sprite.svg#icon-note" />
+                                        <use xlinkHref="/img/icon/sprite.svg#icon-note"/>
                                     </svg>
                                 </div>
 

@@ -4,11 +4,17 @@ import {Track} from "@/sharedTypes/track";
 type initialStateType = {
     currentTrack: null | Track;
     isPlaying: boolean;
+
+    isRepeat: boolean;
+    isShuffle: boolean;
 }
 
 const initialState: initialStateType = {
   currentTrack: null,
     isPlaying: false,
+
+    isRepeat: false,
+    isShuffle: false,
 }
 
 const trackSlice = createSlice({
@@ -21,10 +27,22 @@ const trackSlice = createSlice({
         },
         setIsPlaying: (state, action: PayloadAction<boolean>) => {
             state.isPlaying = action.payload;
-        }
+        },
+        toggleRepeat: state => {
+            state.isRepeat = !state.isRepeat;
+        },
+        toggleShuffle: state => {
+            state.isShuffle = !state.isShuffle;
+        },
     },
 });
 
-export const {setCurrentTrack} = trackSlice.actions;
+export const {
+    setCurrentTrack,
+    setIsPlaying,
+    toggleRepeat,
+    toggleShuffle,
+} = trackSlice.actions;
+
 export const trackSliceReducer = trackSlice.reducer;
-export const {setIsPlaying} = trackSlice.actions;
+
