@@ -44,7 +44,10 @@ export default function Bar() {
                 <div className={styles.playerBlock}>
                     <div className={styles.player}>
                         <div className={styles.controls}>
-                            <div className={styles.btnPrev} />
+
+                            <div className={styles.btnPrev}>
+                                <img className={styles.iconBtnSvg} src="/img/icon/prev.svg" alt="Previous" />
+                            </div>
 
                             <div className={styles.btnPlay} onClick={togglePlay}>
                                 <svg className={styles.btnPlaySvg}>
@@ -54,7 +57,18 @@ export default function Bar() {
                                 </svg>
                             </div>
 
-                            <div className={styles.btnNext} />
+                            <div className={styles.btnNext}>
+                                <img className={styles.iconBtnSvg} src="/img/icon/next.svg" alt="Next" />
+                            </div>
+
+                            <div className={styles.btnRepeat}>
+                                <img className={styles.iconBtnSvg} src="/img/icon/repeat.svg" alt="Repeat" />
+                            </div>
+
+                            <div className={styles.btnShuffle}>
+                                <img className={styles.iconBtnSvg} src="/img/icon/shuffle.svg" alt="Shuffle" />
+                            </div>
+
                         </div>
 
                         <div className={styles.trackPlay}>
