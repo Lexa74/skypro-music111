@@ -6,7 +6,7 @@ import styles from "./bar.module.css";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
     setCurrentTrack,
-    setIsPlaying,
+    setIsPlaying, toggleLike,
     toggleRepeat,
     toggleShuffle,
 } from "@/store/features/trackSlice";
@@ -14,7 +14,7 @@ import { tracks } from "@/data/tracks";
 
 export default function Bar() {
     const dispatch = useAppDispatch();
-    const { currentTrack, isPlaying, isRepeat, isShuffle } = useAppSelector(
+    const { currentTrack, isPlaying, isRepeat, isShuffle, staredByMe } = useAppSelector(
         (state) => state.tracks
     );
 
@@ -201,6 +201,24 @@ export default function Bar() {
                                 </div>
                             </div>
                         </div>
+
+                        <div className={styles.likeBlock}>
+                            <button
+                                className={styles.like}
+                                onClick={() => dispatch(toggleLike())}
+                            >
+                                <svg
+                                    className={styles.likeSvg}
+                                    style={{
+                                        fill: staredByMe ? "#b672ff" : "transparent",
+                                        stroke: staredByMe ? "#b672ff" : "#696969"
+                                    }}
+                                >
+                                    <use xlinkHref="/img/icon/sprite.svg#icon-like" />
+                                </svg>
+                            </button>
+                        </div>
+
                     </div>
 
                     <div className={styles.volumeBlock}>

@@ -7,6 +7,8 @@ type initialStateType = {
 
     isRepeat: boolean;
     isShuffle: boolean;
+
+    staredByMe: boolean;
 }
 
 const initialState: initialStateType = {
@@ -15,6 +17,8 @@ const initialState: initialStateType = {
 
     isRepeat: false,
     isShuffle: false,
+
+    staredByMe: false,
 }
 
 const trackSlice = createSlice({
@@ -34,6 +38,9 @@ const trackSlice = createSlice({
         toggleShuffle: state => {
             state.isShuffle = !state.isShuffle;
         },
+        toggleLike: state => {
+            state.staredByMe = !state.staredByMe;
+        }
     },
 });
 
@@ -42,6 +49,7 @@ export const {
     setIsPlaying,
     toggleRepeat,
     toggleShuffle,
+    toggleLike,
 } = trackSlice.actions;
 
 export const trackSliceReducer = trackSlice.reducer;

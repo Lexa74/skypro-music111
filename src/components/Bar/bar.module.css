@@ -195,20 +195,21 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-left: 26%;
+    margin-left: 20px;
 }
 
 .like,
 .dislike {
     padding: 5px;
+    background: none;
+    border: none;
     cursor: pointer;
 }
 
 .likeSvg {
     width: 14px;
     height: 12px;
-    fill: transparent;
-    stroke: #696969;
+    transition: all 0.15s ease;
 }
 
 .dislike {
