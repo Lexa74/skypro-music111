@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import styles from "./bar.module.css";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
@@ -11,6 +10,7 @@ import {
     toggleShuffle,
 } from "@/store/features/trackSlice";
 import { tracks } from "@/data/tracks";
+import {formatTime} from "@utils/helper";
 
 export default function Bar() {
     const dispatch = useAppDispatch();
@@ -44,7 +44,11 @@ export default function Bar() {
     useEffect(() => {
         if (!audioRef.current || !currentTrack) return;
 
-        audioRef.current.src = currentTrack.track_file;
+        if (audioRef.current.src !== currentTrack.track_file) {
+            audioRef.current.src = currentTrack.track_file;
+            audioRef.current.currentTime = 0;
+        }
+
         audioRef.current.volume = 0.7;
 
         if (isPlaying) {
@@ -98,7 +102,6 @@ export default function Bar() {
         const nextTrack = playlist[nextIdx];
         dispatch(setCurrentTrack(nextTrack));
         setCurrentIndex(nextIdx);
-        setCurrentTime(0);
     };
 
     const handlePrev = () => {
@@ -112,7 +115,6 @@ export default function Bar() {
         const prevTrack = playlist[prevIdx];
         dispatch(setCurrentTrack(prevTrack));
         setCurrentIndex(prevIdx);
-        setCurrentTime(0);
     };
 
     const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -129,16 +131,22 @@ export default function Bar() {
             <audio ref={audioRef} hidden />
 
             <div className={styles.content}>
-                <input
-                    type="range"
-                    className={styles.playerProgress}
-                    min={0}
-                    max={duration || 1}
-                    value={currentTime}
-                    step="any"
-                    onChange={handleSeek}
-                    style={{ '--progress': `${(currentTime / (duration || 1)) * 100}%` } as React.CSSProperties}
-                />
+                <div className={styles.progressWrapper}>
+                    <span className={styles.timeCurrent}>{formatTime(currentTime)}</span>
+
+                    <input
+                        type="range"
+                        className={styles.playerProgress}
+                        min={0}
+                        max={duration || 1}
+                        value={currentTime}
+                        step="any"
+                        onChange={handleSeek}
+                        style={{ '--progress': `${(currentTime / (duration || 1)) * 100}%` } as React.CSSProperties}
+                    />
+
+                    <span className={styles.timeTotal}>{formatTime(duration)}</span>
+                </div>
 
                 <div className={styles.playerBlock}>
                     <div className={styles.player}>
