@@ -1,4 +1,5 @@
 import React, {ReactNode} from "react";
+import styles from './auth.module.css'
 
 interface AuthLayoutProps {
     children: ReactNode;
@@ -6,8 +7,12 @@ interface AuthLayoutProps {
 
 export default function AuthLayout({children}: AuthLayoutProps) {
     return (
-        <>
-            {children}
-        </>
+        <div className={styles.wrapper}>
+            <div className={styles.containerEnter}>
+                <div className={styles.modal__block}>
+                    {children}
+                </div>
+            </div>
+        </div>
     )
 }
