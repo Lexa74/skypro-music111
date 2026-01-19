@@ -1,20 +1,44 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./sidebar.module.css";
+import {useAppDispatch, useAppSelector} from "@/store/hooks";
+import {logout} from "@/store/features/userSlice";
+import { useRouter } from "next/navigation";
+
 
 export default function Sidebar() {
+    const dispatch = useAppDispatch();
+    const router = useRouter();
+
+    const userName = useAppSelector(state => state.user.user?.username);
+    const displayName = userName || "Гость";
+
+    const handleLogout = () => {
+        dispatch(logout());
+        localStorage.clear();
+        router.replace("/auth/signin");
+    };
+
+
     return (
         <div className={styles.sidebar}>
 
             {/* PERSONAL BLOCK */}
             <div className={styles.personal}>
-                <p className={styles.personalName}>Sergey.Ivanov</p>
+                <p className={styles.personalName}>{displayName}</p>
 
-                <div className={styles.icon}>
+                <button
+                    className={styles.icon}
+                    onClick={handleLogout}
+                    title="Выйти"
+                    aria-label="Выйти из аккаунта"
+                >
                     <svg>
-                        <use xlinkHref="/img/icon/sprite.svg#logout"></use>
+                        <use xlinkHref="/img/icon/sprite.svg#logout" />
                     </svg>
-                </div>
+                </button>
             </div>
 
             {/* PLAYLIST BLOCK */}

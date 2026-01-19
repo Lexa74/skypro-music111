@@ -1,14 +1,16 @@
 "use client"
 
+import {useRouter} from "next/navigation";
 import styles from './signup.module.css'
 import classNames from "classnames";
 import Link from "next/link";
-import {useState} from "react";
+import React, {useState} from "react";
 import {useAppDispatch} from "@/store/hooks";
 import {getToken, login, signup} from "@/service/authApi";
 import {setTokens, setUser} from "@/store/features/userSlice";
 
 export default function SignUp() {
+    const router = useRouter();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [repeatPassword, setRepeatPassword] = useState("");
@@ -29,14 +31,16 @@ export default function SignUp() {
         setLoading(true);
 
         try {
-            await signup(email, password || email.split("@")[0]);
+            await signup(email, password);
             const user = await login(email, password);
-            const {access, refresh} = await getToken(email, password);
+            const { access, refresh } = await getToken(email, password);
 
             dispatch(setUser(user));
-            dispatch(setTokens({access, refresh}));
+            dispatch(setTokens({ access, refresh }));
 
-            window.location.href = "/music/main";
+            setTimeout(() => {
+                router.replace("/music/main");
+            }, 300);
         } catch (err: any) {
             setError(err.message || "Ошибка регистрации");
         } finally {
