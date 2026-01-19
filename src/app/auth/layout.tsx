@@ -6,6 +6,9 @@ interface AuthLayoutProps {
 }
 
 export default function AuthLayout({children}: AuthLayoutProps) {
+
+
+
     return (
         <div className={styles.wrapper}>
             <div className={styles.containerEnter}>
