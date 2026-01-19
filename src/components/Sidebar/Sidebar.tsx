@@ -6,14 +6,21 @@ import styles from "./sidebar.module.css";
 import {useAppDispatch, useAppSelector} from "@/store/hooks";
 import {logout} from "@/store/features/userSlice";
 import { useRouter } from "next/navigation";
+import {useEffect, useState} from "react";
 
 
 export default function Sidebar() {
     const dispatch = useAppDispatch();
     const router = useRouter();
 
-    const userName = useAppSelector(state => state.user.user?.username);
-    const displayName = userName || "Гость";
+    const username = useAppSelector(state => state.user.user?.username);
+    const [displayName, setDisplayName] = useState("Гость");
+
+    useEffect(() => {
+        if (username) {
+            setDisplayName(username);
+        }
+    }, [username]);
 
     const handleLogout = () => {
         dispatch(logout());
@@ -27,7 +34,7 @@ export default function Sidebar() {
 
             {/* PERSONAL BLOCK */}
             <div className={styles.personal}>
-                <p className={styles.personalName}>{displayName}</p>
+                <p className={styles.personalName} suppressHydrationWarning>{displayName}</p>
 
                 <button
                     className={styles.icon}
