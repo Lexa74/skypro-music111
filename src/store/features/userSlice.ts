@@ -13,16 +13,6 @@ type InitialStateType = {
     error: string | null;
 };
 
-const loadInitialTokens = () => {
-    if (typeof window === "undefined") {
-        return { accessToken: null, refreshToken: null };
-    }
-    return {
-        accessToken: localStorage.getItem("accessToken"),
-        refreshToken: localStorage.getItem("refreshToken"),
-    };
-};
-
 const loadInitialState = (): InitialStateType => {
     if (typeof window === "undefined") {
         return {
@@ -60,6 +50,7 @@ const userSlice = createSlice({
     name: "user",
     initialState,
     reducers: {
+
         setUser: (
             state,
             action: PayloadAction<{ _id: number; username: string; email: string }>
