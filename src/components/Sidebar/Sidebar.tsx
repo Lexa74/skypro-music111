@@ -54,7 +54,7 @@ export default function Sidebar() {
 
                     {/* CARD 1 */}
                     <div className={styles.item}>
-                        <Link className={styles.link} href="/music/category/1">
+                        <Link className={styles.link} href="/music/category/2">
                             <Image
                                 className={styles.img}
                                 src="/img/playlist01.png"
@@ -67,7 +67,7 @@ export default function Sidebar() {
 
                     {/* CARD 2 */}
                     <div className={styles.item}>
-                        <Link className={styles.link} href="/music/category/2">
+                        <Link className={styles.link} href="/music/category/3">
                             <Image
                                 className={styles.img}
                                 src="/img/playlist02.png"
@@ -80,7 +80,7 @@ export default function Sidebar() {
 
                     {/* CARD 3 */}
                     <div className={styles.item}>
-                        <Link className={styles.link} href="/music/category/3">
+                        <Link className={styles.link} href="/music/category/4">
                             <Image
                                 className={styles.img}
                                 src="/img/playlist03.png"

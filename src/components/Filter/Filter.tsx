@@ -5,13 +5,17 @@ import styles from "./filter.module.css";
 import FilterItem from "@components/FilterItem/FilterItem";
 import {yearSortOptions} from "@/data/sortOptions";
 import {useAppSelector} from "@/store/hooks";
+import {Track} from "@/sharedTypes/track";
 
-export default function Filter() {
+interface FilterProps {
+    tracks: Track[];
+}
+
+export default function Filter({ tracks }: FilterProps) {
     const [activeFilter, setActiveFilter] = useState<null | "author" | "year" | "genre">(null);
-    const tracks = useAppSelector(state => state.tracks.tracks) ?? [];
 
-    const authors: string[] = [];
-    const genres: string[] = [];
+    const authors = Array.from(new Set(tracks.map(t => t.author || "").filter(Boolean)));
+    const genres = Array.from(new Set(tracks.flatMap(t => t.genre || [])));
 
     if (tracks.length > 0) {
         authors.push(...new Set(tracks.map(t => t.author || "")));

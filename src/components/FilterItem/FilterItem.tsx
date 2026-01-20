@@ -24,9 +24,10 @@ export default function FilterItem({label, isOpen, onClick, items}: filterItemPr
             {isOpen && (
                 <div className={styles.dropdown}>
                     <ul className={styles.list}>
-                        {items.map(item => (
-                            <li key={item} className={styles.item}>
-                                {item}</li>
+                        {items.map((item, index) => (
+                            <li key={`${item}-${index}`} className={styles.item}>
+                                {item}
+                            </li>
                         ))}
                     </ul>
                 </div>
