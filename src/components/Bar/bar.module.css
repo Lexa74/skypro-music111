@@ -14,7 +14,42 @@
 .playerProgress {
     width: 100%;
     height: 5px;
+    appearance: none;
     background: #2e2e2e;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.playerProgress::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+
+.playerProgress::-moz-range-thumb {
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+
+.playerProgress::-webkit-slider-runnable-track {
+    background: linear-gradient(to right, #B672FF var(--progress, 0%), #2e2e2e var(--progress, 0%));
+    border-radius: 5px;
+    height: 5px;
+}
+
+.playerProgress::-moz-range-track {
+    background: linear-gradient(to right, #B672FF var(--progress, 0%), #2e2e2e var(--progress, 0%));
+    border-radius: 5px;
+    height: 5px;
+}
+
+.playerProgress:hover {
+    background: #3a3a3a;
 }
 
 .playerBlock {
@@ -47,6 +82,8 @@
     display: flex;
     align-items: center;
     cursor: pointer;
+    background: transparent;
+    border: none;
 }
 
 .btnPrev {
@@ -158,20 +195,21 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-left: 26%;
+    margin-left: 20px;
 }
 
 .like,
 .dislike {
     padding: 5px;
+    background: none;
+    border: none;
     cursor: pointer;
 }
 
 .likeSvg {
     width: 14px;
     height: 12px;
-    fill: transparent;
-    stroke: #696969;
+    transition: all 0.15s ease;
 }
 
 .dislike {
@@ -242,4 +280,30 @@
     border-radius: 50%;
     position: relative;
     margin-top: -7px;
+}
+
+
+.progressWrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 15px;
+    margin: 4px 0 8px;
+}
+
+.timeCurrent,
+.timeTotal {
+    font-size: 11px;
+    color: #a0a0a0;
+    min-width: 40px;
+    text-align: center;
+    user-select: none;
+}
+
+.timeCurrent {
+    text-align: right;
+}
+
+.timeTotal {
+    text-align: left;
 }
