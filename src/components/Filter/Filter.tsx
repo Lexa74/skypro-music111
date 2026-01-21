@@ -3,16 +3,24 @@
 import {useState} from "react";
 import styles from "./filter.module.css";
 import FilterItem from "@components/FilterItem/FilterItem";
-import {tracks} from "@/data/tracks";
 import {yearSortOptions} from "@/data/sortOptions";
+import {useAppSelector} from "@/store/hooks";
+import {Track} from "@/sharedTypes/track";
 
-export default function Filter() {
+interface FilterProps {
+    tracks: Track[];
+}
+
+export default function Filter({ tracks }: FilterProps) {
     const [activeFilter, setActiveFilter] = useState<null | "author" | "year" | "genre">(null);
 
-    const authors = Array.from(new Set(tracks.map(t => t.author)));
-    const genres = Array.from(
-        new Set(tracks.flatMap(track => track.genre))
-    );
+    const authors = Array.from(new Set(tracks.map(t => t.author || "").filter(Boolean)));
+    const genres = Array.from(new Set(tracks.flatMap(t => t.genre || [])));
+
+    if (tracks.length > 0) {
+        authors.push(...new Set(tracks.map(t => t.author || "")));
+        genres.push(...new Set(tracks.flatMap(t => t.genre || [])));
+    }
 
     const toggleFilter = (type: "author" | "year" | "genre") => {
         setActiveFilter(prev => (prev === type ? null : type));
@@ -33,7 +41,7 @@ export default function Filter() {
                 label="году выпуска"
                 isOpen={activeFilter === "year"}
                 onClick={() => toggleFilter("year")}
-                items={yearSortOptions.map(option => option.label)}
+                items={yearSortOptions.map(o => o.label)}
             />
 
             <FilterItem

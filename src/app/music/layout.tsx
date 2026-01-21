@@ -1,20 +1,18 @@
-import styles from "./page.module.css";
-
-import CenterBlock from "@components/CenterBlock/CenterBlock";
+import Nav from "@components/Nav/Nav";
 import Sidebar from "@components/Sidebar/Sidebar";
 import Bar from "@components/Bar/Bar";
-import Nav from "@components/Nav/Nav";
+import styles from "@/app/music/main/page.module.css";
+import React from "react";
 
-export default function Home() {
+export default function MusicLayout({ children }: { children: React.ReactNode }) {
     return (
         <div className={styles.wrapper}>
             <div className={styles.container}>
                 <main className={styles.main}>
                     <Nav />
-                    <CenterBlock />
+                    {children}
                     <Sidebar />
                 </main>
-
                 <Bar />
             </div>
         </div>

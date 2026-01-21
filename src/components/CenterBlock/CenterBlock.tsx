@@ -2,16 +2,26 @@ import styles from "./centerblock.module.css";
 import Search from "@components/Search/Search";
 import Filter from "@components/Filter/Filter";
 import Track from "@components/Track/Track";
-import { tracks } from "@/data/tracks";
+import {Track as TrackType} from "@/sharedTypes/track";
 
-export default function CenterBlock() {
+interface CenterBlockProps {
+    tracks: TrackType[];
+    title?: string;
+    isLoading?: boolean;
+}
+
+export default function CenterBlock( {tracks, title = "Треки", isLoading = false}: CenterBlockProps ) {
+    const safeTracks = Array.isArray(tracks) ? tracks : [];
+
     return (
         <section className={styles.centerblock}>
             <Search />
 
-            <h2 className={styles.title}>Треки</h2>
+            <h2 className={styles.title}>
+                {isLoading ? title || "..." : title}
+            </h2>
 
-            <Filter />
+            <Filter tracks={safeTracks}/>
 
             <div className={styles.content}>
                 <div className={styles.contentTitle}>
@@ -26,9 +36,15 @@ export default function CenterBlock() {
                 </div>
 
                 <div className={styles.playlist}>
-                    {tracks.map(track => (
-                        <Track key={track._id} track={track} />
-                    ))}
+                    {isLoading ? (
+                        <div className={styles.tracks_notFound}>Загрузка треков...</div>
+                    ) : safeTracks.length > 0 ? (
+                        safeTracks.map((track) => (
+                            <Track key={track._id} track={track} />
+                        ))
+                    ) : (
+                        <div className={styles.tracks_notFound}>Треков пока нет</div>
+                    )}
                 </div>
             </div>
         </section>

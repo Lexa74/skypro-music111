@@ -9,12 +9,11 @@ import {
     toggleRepeat,
     toggleShuffle,
 } from "@/store/features/trackSlice";
-import { tracks } from "@/data/tracks";
 import {formatTime} from "@utils/helper";
 
 export default function Bar() {
     const dispatch = useAppDispatch();
-    const { currentTrack, isPlaying, isRepeat, isShuffle, staredByMe } = useAppSelector(
+    const { currentTrack, isPlaying, isRepeat, isShuffle, staredByMe, tracks } = useAppSelector(
         (state) => state.tracks
     );
 
@@ -28,16 +27,8 @@ export default function Bar() {
         if (isShuffle) {
             const shuffled = [...tracks].sort(() => Math.random() - 0.5);
             setPlaylist(shuffled);
-            if (currentTrack) {
-                const newIndex = shuffled.findIndex((t) => t._id === currentTrack._id);
-                if (newIndex !== -1) setCurrentIndex(newIndex);
-            }
         } else {
             setPlaylist(tracks);
-            if (currentTrack) {
-                const newIndex = tracks.findIndex((t) => t._id === currentTrack._id);
-                if (newIndex !== -1) setCurrentIndex(newIndex);
-            }
         }
     }, [isShuffle, currentTrack]);
 

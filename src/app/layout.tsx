@@ -3,7 +3,7 @@ import {Montserrat} from 'next/font/google';
 import './globals.css';
 import React from "react";
 import ReduxProvider from "@/store/ReduxProvider";
-import {store} from "next/dist/build/output/store";
+import AuthInitializer from "@components/AuthInitializer";
 
 const montserrat = Montserrat({
     variable: '--font-montserrat',
@@ -22,12 +22,14 @@ export default function RootLayout({
                                    }: Readonly<{
     children: React.ReactNode;
 }>) {
+
     return (
-        <ReduxProvider >
+        <ReduxProvider>
             <html lang="en">
             <body
-                className= {montserrat.className}
+                className={montserrat.className}
             >
+            <AuthInitializer/>
             {children}
             </body>
             </html>
