@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import styles from "./bar.module.css";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import {useAppDispatch, useAppSelector} from "@/store/hooks";
 import {
     setCurrentTrack,
     setIsPlaying, toggleLike,
@@ -11,41 +11,94 @@ import {
 } from "@/store/features/trackSlice";
 import {formatTime} from "@utils/helper";
 
+function shuffleArray<T>(arr: T[]) {
+    const copy = [...arr];
+    for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+}
+
 export default function Bar() {
     const dispatch = useAppDispatch();
-    const { currentTrack, isPlaying, isRepeat, isShuffle, staredByMe, tracks } = useAppSelector(
+    const {currentTrack, isPlaying, isRepeat, isShuffle, staredByMe, tracks} = useAppSelector(
         (state) => state.tracks
     );
 
     const audioRef = useRef<HTMLAudioElement>(null);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
-    const [playlist, setPlaylist] = useState(tracks);
-    const [currentIndex, setCurrentIndex] = useState(-1);
+
+    const playlist = useMemo(() => {
+        if (!Array.isArray(tracks) || tracks.length === 0) return [];
+        return isShuffle ? shuffleArray(tracks) : tracks;
+    }, [tracks, isShuffle]);
+
+    const currentIndex = useMemo(() => {
+        if (!currentTrack) return -1;
+        return playlist.findIndex((t) => t._id === currentTrack._id);
+    }, [playlist, currentTrack]);
+
+    const handlePlayPause = useCallback(() => {
+        dispatch(setIsPlaying(!isPlaying));
+    }, [dispatch, isPlaying]);
+
+    const handleNext = useCallback(() => {
+        if (!playlist.length) return;
+
+        const nextIdx = currentIndex >= 0 ? (currentIndex + 1) % playlist.length : 0;
+        dispatch(setCurrentTrack(playlist[nextIdx]));
+    }, [dispatch, playlist, currentIndex]);
+
+    const handlePrev = useCallback(() => {
+        if (!playlist.length) return;
+
+        const prevIdx =
+            currentIndex >= 0 ? (currentIndex - 1 + playlist.length) % playlist.length : playlist.length - 1;
+        dispatch(setCurrentTrack(playlist[prevIdx]));
+    }, [dispatch, playlist, currentIndex]);
+
+    const handleSeek = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        const audio = audioRef.current;
+        if (!audio) return;
+
+        const time = Number(e.target.value);
+        audio.currentTime = time;
+        setCurrentTime(time);
+    }, []);
+
+    const handleVolume = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        const audio = audioRef.current;
+        if (!audio) return;
+
+        audio.volume = Number(e.target.value);
+    }, []);
+
+    const progressStyle = useMemo(
+        () =>
+            ({
+                "--progress": `${(currentTime / (duration || 1)) * 100}%`,
+            }) as React.CSSProperties,
+        [currentTime, duration]
+    );
 
     useEffect(() => {
-        if (isShuffle) {
-            const shuffled = [...tracks].sort(() => Math.random() - 0.5);
-            setPlaylist(shuffled);
-        } else {
-            setPlaylist(tracks);
-        }
-    }, [isShuffle, currentTrack]);
+        const audio = audioRef.current;
+        if (!audio || !currentTrack) return;
 
-    useEffect(() => {
-        if (!audioRef.current || !currentTrack) return;
-
-        if (audioRef.current.src !== currentTrack.track_file) {
-            audioRef.current.src = currentTrack.track_file;
-            audioRef.current.currentTime = 0;
+        if (audio.src !== currentTrack.track_file) {
+            audio.src = currentTrack.track_file;
+            audio.currentTime = 0;
+            setCurrentTime(0);
         }
 
-        audioRef.current.volume = 0.7;
+        audio.volume = 0.7;
 
         if (isPlaying) {
-            audioRef.current.play().catch(() => {});
+            audio.play().catch(() => {});
         } else {
-            audioRef.current.pause();
+            audio.pause();
         }
     }, [currentTrack, isPlaying]);
 
@@ -78,48 +131,12 @@ export default function Bar() {
         };
     }, [currentTrack, isRepeat]);
 
-    const handlePlayPause = () => {
-        dispatch(setIsPlaying(!isPlaying));
-    };
-
-    const handleNext = () => {
-        if (playlist.length === 0) return;
-
-        let nextIdx = currentIndex + 1;
-        if (nextIdx >= playlist.length) {
-            nextIdx = 0;
-        }
-
-        const nextTrack = playlist[nextIdx];
-        dispatch(setCurrentTrack(nextTrack));
-        setCurrentIndex(nextIdx);
-    };
-
-    const handlePrev = () => {
-        if (playlist.length === 0) return;
-
-        let prevIdx = currentIndex - 1;
-        if (prevIdx < 0) {
-            prevIdx = playlist.length - 1;
-        }
-
-        const prevTrack = playlist[prevIdx];
-        dispatch(setCurrentTrack(prevTrack));
-        setCurrentIndex(prevIdx);
-    };
-
-    const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (!audioRef.current) return;
-        const time = Number(e.target.value);
-        audioRef.current.currentTime = time;
-        setCurrentTime(time);
-    };
 
     if (!currentTrack) return null;
 
     return (
         <div className={styles.bar}>
-            <audio ref={audioRef} hidden />
+            <audio ref={audioRef} hidden/>
 
             <div className={styles.content}>
                 <div className={styles.progressWrapper}>
@@ -133,7 +150,7 @@ export default function Bar() {
                         value={currentTime}
                         step="any"
                         onChange={handleSeek}
-                        style={{ '--progress': `${(currentTime / (duration || 1)) * 100}%` } as React.CSSProperties}
+                        style={progressStyle}
                     />
 
                     <span className={styles.timeTotal}>{formatTime(duration)}</span>
@@ -144,7 +161,7 @@ export default function Bar() {
                         <div className={styles.controls}>
                             <button className={styles.btnPrev} onClick={handlePrev}>
                                 <svg className={styles.btnPrevSvg}>
-                                    <use xlinkHref="/img/icon/sprite.svg#icon-prev" />
+                                    <use xlinkHref="/img/icon/sprite.svg#icon-prev"/>
                                 </svg>
                             </button>
 
@@ -158,27 +175,27 @@ export default function Bar() {
 
                             <button className={styles.btnNext} onClick={handleNext}>
                                 <svg className={styles.btnNextSvg}>
-                                    <use xlinkHref="/img/icon/sprite.svg#icon-next" />
+                                    <use xlinkHref="/img/icon/sprite.svg#icon-next"/>
                                 </svg>
                             </button>
 
                             <button
                                 className={styles.btnRepeat}
                                 onClick={() => dispatch(toggleRepeat())}
-                                style={{ opacity: isRepeat ? 1 : 0.6 }}
+                                style={{opacity: isRepeat ? 1 : 0.6}}
                             >
                                 <svg className={styles.btnRepeatSvg}>
-                                    <use xlinkHref="/img/icon/sprite.svg#icon-repeat" />
+                                    <use xlinkHref="/img/icon/sprite.svg#icon-repeat"/>
                                 </svg>
                             </button>
 
                             <button
                                 className={styles.btnShuffle}
                                 onClick={() => dispatch(toggleShuffle())}
-                                style={{ opacity: isShuffle ? 1 : 0.6 }}
+                                style={{opacity: isShuffle ? 1 : 0.6}}
                             >
                                 <svg className={styles.btnShuffleSvg}>
-                                    <use xlinkHref="/img/icon/sprite.svg#icon-shuffle" />
+                                    <use xlinkHref="/img/icon/sprite.svg#icon-shuffle"/>
                                 </svg>
                             </button>
                         </div>
@@ -187,7 +204,7 @@ export default function Bar() {
                             <div className={styles.trackContain}>
                                 <div className={styles.trackImage}>
                                     <svg className={styles.trackSvg}>
-                                        <use xlinkHref="/img/icon/sprite.svg#icon-note" />
+                                        <use xlinkHref="/img/icon/sprite.svg#icon-note"/>
                                     </svg>
                                 </div>
                                 <div>
@@ -213,7 +230,7 @@ export default function Bar() {
                                         stroke: staredByMe ? "#b672ff" : "#696969"
                                     }}
                                 >
-                                    <use xlinkHref="/img/icon/sprite.svg#icon-like" />
+                                    <use xlinkHref="/img/icon/sprite.svg#icon-like"/>
                                 </svg>
                             </button>
                         </div>
@@ -224,7 +241,7 @@ export default function Bar() {
                         <div className={styles.volumeContent}>
                             <div className={styles.volumeImage}>
                                 <svg className={styles.volumeSvg}>
-                                    <use xlinkHref="/img/icon/sprite.svg#icon-volume" />
+                                    <use xlinkHref="/img/icon/sprite.svg#icon-volume"/>
                                 </svg>
                             </div>
                             <input
@@ -234,9 +251,7 @@ export default function Bar() {
                                 step="0.01"
                                 defaultValue="0.7"
                                 className={styles.volumeLine}
-                                onChange={(e) => {
-                                    if (audioRef.current) audioRef.current.volume = Number(e.target.value);
-                                }}
+                                onChange={handleVolume}
                             />
                         </div>
                     </div>
