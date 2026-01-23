@@ -13,8 +13,11 @@ export default function Sidebar() {
     const dispatch = useAppDispatch();
     const router = useRouter();
 
-    const username = useAppSelector(state => state.user.user?.username);
-    const displayName = useMemo(() => username ?? "Гость", [username]);
+    const { user, hydrated } = useAppSelector((s) => s.user);
+    const displayName = useMemo(() => {
+        if (!hydrated) return "";
+        return user?.username ?? "Гость";
+    }, [hydrated, user]);
 
     const handleLogout = useCallback(() => {
         dispatch(logout());
