@@ -56,10 +56,10 @@ export default function Nav() {
             <div className={`${styles.menuWrapper} ${isOpen ? styles.menuWrapperOpen : ''}`}>
                 <ul className={styles.menuList}>
                     <li className={styles.menuItem}>
-                        <Link href="#" className={styles.menuLink}>Главное</Link>
+                        <Link href="/music/main/" className={styles.menuLink}>Главное</Link>
                     </li>
                     <li className={styles.menuItem}>
-                        <Link href="#" className={styles.menuLink}>Мой плейлист</Link>
+                        <Link href="/music/favorites/" className={styles.menuLink}>Мой плейлист</Link>
                     </li>
                     {mounted && (
                         <li className={styles.menuItem}>

@@ -2,9 +2,9 @@
 
 import CenterBlock from "@/components/CenterBlock/CenterBlock";
 import { useEffect, useState } from "react";
-import { getTracks } from "@/service/tarckApi";
+import { getTracks } from "@/service/trackApi";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setTracks } from "@/store/features/trackSlice";
+import {setTracks} from "@/store/features/trackSlice";
 
 export default function MainPage() {
     const [loading, setLoading] = useState(true);

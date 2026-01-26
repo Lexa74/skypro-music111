@@ -5,9 +5,9 @@ import styles from "./bar.module.css";
 import {useAppDispatch, useAppSelector} from "@/store/hooks";
 import {
     setCurrentTrack,
-    setIsPlaying, toggleLike,
+    setIsPlaying,
     toggleRepeat,
-    toggleShuffle,
+    toggleShuffle, toggleTrackLike,
 } from "@/store/features/trackSlice";
 import {formatTime} from "@utils/helper";
 
@@ -22,13 +22,18 @@ function shuffleArray<T>(arr: T[]) {
 
 export default function Bar() {
     const dispatch = useAppDispatch();
-    const {currentTrack, isPlaying, isRepeat, isShuffle, staredByMe, tracks} = useAppSelector(
+    const {currentTrack, isPlaying, isRepeat, isShuffle, tracks} = useAppSelector(
         (state) => state.tracks
     );
 
     const audioRef = useRef<HTMLAudioElement>(null);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
+
+    const isLiked = useAppSelector((state) => {
+        if (!currentTrack) return false;
+        return state.tracks.likedIds.includes(currentTrack._id);
+    });
 
     const playlist = useMemo(() => {
         if (!Array.isArray(tracks) || tracks.length === 0) return [];
@@ -221,13 +226,16 @@ export default function Bar() {
                         <div className={styles.likeBlock}>
                             <button
                                 className={styles.like}
-                                onClick={() => dispatch(toggleLike())}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    currentTrack && dispatch(toggleTrackLike(currentTrack._id));
+                                }}
                             >
                                 <svg
                                     className={styles.likeSvg}
                                     style={{
-                                        fill: staredByMe ? "#b672ff" : "transparent",
-                                        stroke: staredByMe ? "#b672ff" : "#696969"
+                                        fill: isLiked ? "#b672ff" : "transparent",
+                                        stroke: isLiked ? "#b672ff" : "#696969"
                                     }}
                                 >
                                     <use xlinkHref="/img/icon/sprite.svg#icon-like"/>
