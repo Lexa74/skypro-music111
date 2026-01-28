@@ -3,7 +3,7 @@ import Search from "@components/Search/Search";
 import Filter from "@components/Filter/Filter";
 import Track from "@components/Track/Track";
 import {Track as TrackType} from "@/sharedTypes/track";
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 
 interface CenterBlockProps {
     tracks: TrackType[];
@@ -12,8 +12,6 @@ interface CenterBlockProps {
 }
 
 export default function CenterBlock( {tracks, title = "Треки", isLoading = false}: CenterBlockProps ) {
-    console.log("CenterBlock получил треков:", tracks?.length ?? "undefined");
-    console.log("Треки:", tracks?.slice(0, 3))
     const safeTracks = Array.isArray(tracks) ? tracks : [];
 
     const [searchValue, setSearchValue] = useState("");

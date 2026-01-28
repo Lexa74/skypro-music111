@@ -22,10 +22,8 @@ export default function FilterItem({
                                        onSelect,
 }: FilterItemProps) {
 
-    const isMulti = items.length > 0 && typeof items[0] === "string";
-    const count = isMulti
-        ? (selected as string[] | undefined)?.length ?? 0
-        : (selected as string | null | undefined) ? 1 : 0;
+    const isMulti = Array.isArray(selected);
+    const count = Array.isArray(selected) ? selected.length : selected ? 1 : 0;
 
     const getItemValue = (item: Item) =>
         typeof item === "string" ? item : item.id;
@@ -33,9 +31,8 @@ export default function FilterItem({
         typeof item === "string" ? item : item.label;
 
     const isSelected = (value: string) =>
-        isMulti
-            ? (selected as string[] | undefined)?.includes(value)
-            : (selected as string | null | undefined) === value;
+        Array.isArray(selected) ? selected.includes(value) : selected === value;
+
 
     const handleItemClick = (item: Item) => {
         const value = getItemValue(item);
