@@ -15,7 +15,6 @@ type Props = {
 
 export default function Track({ track }: Props) {
     const dispatch = useAppDispatch();
-    const userId = useAppSelector((state) => state.user.user?._id ?? 0);
     const { currentTrack, isPlaying } = useAppSelector(state => state.tracks);
 
     const isActive = useMemo(() => currentTrack?._id === track._id && isPlaying, [currentTrack?._id, track._id, isPlaying]);
