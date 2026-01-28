@@ -11,45 +11,35 @@ type InitialStateType = {
     accessToken: string | null;
     refreshToken: string | null;
     error: string | null;
+    hydrated: boolean;
 };
 
-const loadInitialState = (): InitialStateType => {
-    if (typeof window === "undefined") {
-        return {
-            user: null,
-            accessToken: null,
-            refreshToken: null,
-            error: null,
-        };
-    }
-
-    const savedUser = localStorage.getItem("user");
-    const accessToken = localStorage.getItem("accessToken");
-    const refreshToken = localStorage.getItem("refreshToken");
-
-    let parsedUser: User | null = null;
-    if (savedUser) {
-        try {
-            parsedUser = JSON.parse(savedUser) as User;
-        } catch (e) {
-            console.error("Ошибка парсинга user из localStorage", e);
-        }
-    }
-
-    return {
-        user: parsedUser,
-        accessToken,
-        refreshToken,
-        error: null,
-    };
+const initialState: InitialStateType = {
+    user: null,
+    accessToken: null,
+    refreshToken: null,
+    error: null,
+    hydrated: false,
 };
-
-const initialState: InitialStateType = loadInitialState();
 
 const userSlice = createSlice({
     name: "user",
     initialState,
     reducers: {
+        setHydrated: (state, action: PayloadAction<boolean>) => {
+            state.hydrated = action.payload;
+        },
+
+        hydrateFromStorage: (state) => {
+            const savedUser = localStorage.getItem("user");
+            const accessToken = localStorage.getItem("accessToken");
+            const refreshToken = localStorage.getItem("refreshToken");
+
+            state.user = savedUser ? (JSON.parse(savedUser) as User) : null;
+            state.accessToken = accessToken;
+            state.refreshToken = refreshToken;
+            state.hydrated = true;
+        },
 
         setUser: (
             state,
@@ -75,12 +65,13 @@ const userSlice = createSlice({
             state.accessToken = null;
             state.refreshToken = null;
             state.error = null;
+            state.hydrated = true;
             localStorage.removeItem("user");
             localStorage.removeItem("accessToken");
             localStorage.removeItem("refreshToken");
         },
     },
 });
-export const { setUser, setTokens, logout } = userSlice.actions;
+export const { setHydrated, hydrateFromStorage, setUser, setTokens, logout } = userSlice.actions;
 
 export const userSliceReducer = userSlice.reducer;

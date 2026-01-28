@@ -1,10 +1,9 @@
 "use client";
 
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import styles from "./filter.module.css";
 import FilterItem from "@components/FilterItem/FilterItem";
 import {yearSortOptions} from "@/data/sortOptions";
-import {useAppSelector} from "@/store/hooks";
 import {Track} from "@/sharedTypes/track";
 
 interface FilterProps {
@@ -14,13 +13,23 @@ interface FilterProps {
 export default function Filter({ tracks }: FilterProps) {
     const [activeFilter, setActiveFilter] = useState<null | "author" | "year" | "genre">(null);
 
-    const authors = Array.from(new Set(tracks.map(t => t.author || "").filter(Boolean)));
-    const genres = Array.from(new Set(tracks.flatMap(t => t.genre || [])));
+    const authors = useMemo(() => {
+        const set = new Set<string>();
+        for (const t of tracks) {
+            if (t.author) set.add(t.author);
+        }
+        return Array.from(set);
+    }, [tracks]);
 
-    if (tracks.length > 0) {
-        authors.push(...new Set(tracks.map(t => t.author || "")));
-        genres.push(...new Set(tracks.flatMap(t => t.genre || [])));
-    }
+    const genres = useMemo(() => {
+        const set = new Set<string>();
+        for (const t of tracks) {
+            for (const g of t.genre || []) set.add(g);
+        }
+        return Array.from(set);
+    }, [tracks]);
+
+    const yearLabels = useMemo(() => yearSortOptions.map((o) => o.label), []);
 
     const toggleFilter = (type: "author" | "year" | "genre") => {
         setActiveFilter(prev => (prev === type ? null : type));
@@ -41,7 +50,7 @@ export default function Filter({ tracks }: FilterProps) {
                 label="году выпуска"
                 isOpen={activeFilter === "year"}
                 onClick={() => toggleFilter("year")}
-                items={yearSortOptions.map(o => o.label)}
+                items={yearLabels}
             />
 
             <FilterItem

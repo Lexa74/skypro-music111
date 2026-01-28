@@ -4,7 +4,7 @@ import {useRouter} from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./nav.module.css";
-import React from "react";
+import React, {useCallback} from "react";
 import {useAppDispatch, useAppSelector} from "@/store/hooks";
 import { useState, useEffect } from "react";
 import {logout} from "@/store/features/userSlice";
@@ -20,11 +20,17 @@ export default function Nav() {
         setMounted(true);
     }, []);
 
-    const handleLogout = () => {
+    const toggleMenu = useCallback(() => {
+        setIsOpen((prev) => !prev);
+    }, []);
+
+    const handleLogout = useCallback(() => {
         dispatch(logout());
         setIsOpen(false);
-        router.replace('/auth/signin/');
-    };
+        router.replace("/auth/signin/");
+    }, [dispatch, router]);
+
+    const handleClose = useCallback(() => setIsOpen(false), []);
 
     return (
         <nav className={styles.nav}>
@@ -40,7 +46,7 @@ export default function Nav() {
 
             <div
                 className={styles.burger}
-                onClick={() => setIsOpen(prev => !prev)}
+                onClick={toggleMenu}
             >
                 <span className={styles.burgerLine}></span>
                 <span className={styles.burgerLine}></span>
@@ -50,10 +56,10 @@ export default function Nav() {
             <div className={`${styles.menuWrapper} ${isOpen ? styles.menuWrapperOpen : ''}`}>
                 <ul className={styles.menuList}>
                     <li className={styles.menuItem}>
-                        <Link href="#" className={styles.menuLink}>Главное</Link>
+                        <Link href="/music/main/" className={styles.menuLink}>Главное</Link>
                     </li>
                     <li className={styles.menuItem}>
-                        <Link href="#" className={styles.menuLink}>Мой плейлист</Link>
+                        <Link href="/music/favorites/" className={styles.menuLink}>Мой плейлист</Link>
                     </li>
                     {mounted && (
                         <li className={styles.menuItem}>
@@ -69,7 +75,7 @@ export default function Nav() {
                                 <Link
                                     href="/auth/signin"
                                     className={styles.menuLink}
-                                    onClick={() => setIsOpen(false)}
+                                    onClick={handleClose}
                                 >
                                     Войти
                                 </Link>

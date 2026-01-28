@@ -24,15 +24,13 @@ export default function RootLayout({
 }>) {
 
     return (
+        <html lang="en">
+        <body className={montserrat.className}>
         <ReduxProvider>
-            <html lang="en">
-            <body
-                className={montserrat.className}
-            >
             <AuthInitializer/>
             {children}
-            </body>
-            </html>
         </ReduxProvider>
+        </body>
+        </html>
     );
 }

@@ -6,28 +6,24 @@ import styles from "./sidebar.module.css";
 import {useAppDispatch, useAppSelector} from "@/store/hooks";
 import {logout} from "@/store/features/userSlice";
 import { useRouter } from "next/navigation";
-import {useEffect, useState} from "react";
+import {useCallback, useMemo} from "react";
 
 
 export default function Sidebar() {
     const dispatch = useAppDispatch();
     const router = useRouter();
 
-    const username = useAppSelector(state => state.user.user?.username);
-    const [displayName, setDisplayName] = useState("Гость");
+    const { user, hydrated } = useAppSelector((s) => s.user);
+    const displayName = useMemo(() => {
+        if (!hydrated) return "";
+        return user?.username ?? "Гость";
+    }, [hydrated, user]);
 
-    useEffect(() => {
-        if (username) {
-            setDisplayName(username);
-        }
-    }, [username]);
-
-    const handleLogout = () => {
+    const handleLogout = useCallback(() => {
         dispatch(logout());
         localStorage.clear();
         router.replace("/auth/signin");
-    };
-
+    }, [dispatch, router]);
 
     return (
         <div className={styles.sidebar}>
