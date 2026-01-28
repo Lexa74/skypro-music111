@@ -8,9 +8,23 @@ import {Track} from "@/sharedTypes/track";
 
 interface FilterProps {
     tracks: Track[];
+    selectedAuthors: string[];
+    onAuthorToggle: (author: string) => void;
+    selectedGenres: string[];
+    onGenreToggle: (genre: string) => void;
+    selectedYearId: string | null;
+    onYearSelect: (id: string) => void;
 }
 
-export default function Filter({ tracks }: FilterProps) {
+export default function Filter({
+                                   tracks,
+                                   selectedAuthors,
+                                   onAuthorToggle,
+                                   selectedGenres,
+                                   onGenreToggle,
+                                   selectedYearId,
+                                   onYearSelect,
+                               }: FilterProps) {
     const [activeFilter, setActiveFilter] = useState<null | "author" | "year" | "genre">(null);
 
     const authors = useMemo(() => {
@@ -29,10 +43,8 @@ export default function Filter({ tracks }: FilterProps) {
         return Array.from(set);
     }, [tracks]);
 
-    const yearLabels = useMemo(() => yearSortOptions.map((o) => o.label), []);
-
     const toggleFilter = (type: "author" | "year" | "genre") => {
-        setActiveFilter(prev => (prev === type ? null : type));
+        setActiveFilter((prev) => (prev === type ? null : type));
     };
 
     return (
@@ -44,13 +56,17 @@ export default function Filter({ tracks }: FilterProps) {
                 isOpen={activeFilter === "author"}
                 onClick={() => toggleFilter("author")}
                 items={authors}
+                selected={selectedAuthors}
+                onToggle={onAuthorToggle}
             />
 
             <FilterItem
                 label="году выпуска"
                 isOpen={activeFilter === "year"}
                 onClick={() => toggleFilter("year")}
-                items={yearLabels}
+                items={yearSortOptions}
+                selected={selectedYearId}
+                onSelect={onYearSelect}
             />
 
             <FilterItem
@@ -58,6 +74,8 @@ export default function Filter({ tracks }: FilterProps) {
                 isOpen={activeFilter === "genre"}
                 onClick={() => toggleFilter("genre")}
                 items={genres}
+                selected={selectedGenres}
+                onToggle={onGenreToggle}
             />
         </div>
     );
