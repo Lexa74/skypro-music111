@@ -3,7 +3,8 @@ import Search from "@components/Search/Search";
 import Filter from "@components/Filter/Filter";
 import Track from "@components/Track/Track";
 import {Track as TrackType} from "@/sharedTypes/track";
-import {useEffect, useMemo, useState} from "react";
+import {useMemo, useState} from "react";
+import TrackListSkeleton from '@components/Skeletons/TrackListSkeleton/TrackListSkeleton';
 
 interface CenterBlockProps {
     tracks: TrackType[];
@@ -76,7 +77,7 @@ export default function CenterBlock( {tracks, title = "Треки", isLoading = 
             <Search value={searchValue} onChange={setSearchValue}/>
 
             <h2 className={styles.title}>
-                {isLoading ? title || "..." : title}
+                {isLoading ? "Загрузка..." : title}
             </h2>
 
             <Filter tracks={safeTracks}
@@ -102,7 +103,7 @@ export default function CenterBlock( {tracks, title = "Треки", isLoading = 
 
                 <div className={styles.playlist}>
                     {isLoading ? (
-                        <div className={styles.tracks_notFound}>Загрузка треков...</div>
+                      <TrackListSkeleton rows={10} />
                     ) : safeTracks.length === 0 ? (
                         <div className={styles.tracks_notFound}>Треков пока нет</div>
                     ) : filteredTracks.length === 0 ? (

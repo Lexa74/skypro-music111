@@ -33,10 +33,17 @@ export default function SignIn() {
             setTimeout(() => {
                 router.replace("/music/main");
             }, 300);
-        } catch (err: any) {
-            setError(err.message || "Ошибка входа. Проверьте данные.");
+        } catch (err) {
+          const message =
+            err instanceof Error
+              ? err.message
+              : typeof err === "string"
+                ? err
+                : "Ошибка входа. Проверьте данные.";
+
+          setError(message);
         } finally {
-            setLoading(false);
+          setLoading(false);
         }
     };
 

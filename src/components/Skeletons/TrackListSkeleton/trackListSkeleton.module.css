@@ -1,0 +1,97 @@
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 1.2fr 0.9fr 0.9fr 64px;
+    align-items: center;
+    gap: 16px;
+    min-height: 56px;
+}
+
+.colTrack {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.skeleton {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.14),
+            transparent
+    );
+    animation: shimmer 1.2s infinite;
+}
+
+@keyframes shimmer {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    flex: 0 0 auto;
+}
+
+.lineLg {
+    height: 14px;
+    width: 65%;
+}
+
+.lineSm {
+    height: 12px;
+    width: 45%;
+}
+
+.colAuthor {
+    height: 14px;
+    width: 70%;
+    justify-self: start;
+}
+
+.colAlbum {
+    height: 14px;
+    width: 70%;
+    justify-self: start;
+}
+
+.colTime {
+    height: 14px;
+    width: 42px;
+    justify-self: end;
+}
+
+@media (max-width: 1024px) {
+    .row {
+        grid-template-columns: 1fr 0.8fr 48px;
+    }
+    .colAlbum {
+        display: none;
+    }
+}
