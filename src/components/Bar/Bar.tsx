@@ -11,7 +11,7 @@ import {
 } from "@/store/features/trackSlice";
 import {formatTime} from "@utils/helper";
 
-function shuffleArray<T>(arr: T[]) {
+export function shuffleArray<T>(arr: T[]) {
     const copy = [...arr];
     for (let i = copy.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
