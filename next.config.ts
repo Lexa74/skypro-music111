@@ -1,15 +1,21 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-           async redirects() {
-            return [
-                {
-                    source: '/',
-                    destination: '/music/main',
-                    permanent: true,
-                },
-            ]
-        },
+    reactStrictMode: true,
+    // Добавьте для canary-версий
+    experimental: {
+        optimizeCss: false,
+    },
+
+    async redirects() {
+        return [
+            {
+                source: '/',
+                destination: '/music/main',
+                permanent: true,
+            },
+        ];
+    },
 };
 
 export default nextConfig;
