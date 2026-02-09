@@ -1,0 +1,72 @@
+.centerblock {
+    flex-grow: 3;
+    padding: 20px 40px 20px 111px;
+}
+
+.title {
+    font-size: 64px;
+    line-height: 72px;
+    margin-bottom: 45px;
+    color: #fff;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+}
+
+.contentTitle {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.playlistCol {
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: #696969;
+    text-transform: uppercase;
+}
+
+.col01 {
+    width: 447px;
+}
+
+.col02 {
+    width: 321px;
+}
+
+.col03 {
+    width: 245px;
+}
+
+.col04 {
+    width: 120px;
+    text-align: end;
+}
+
+.playlistColSvg {
+    width: 12px;
+    height: 12px;
+    stroke: #696969;
+    fill: transparent;
+}
+
+.playlist {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    max-height: 60vh;
+    scrollbar-gutter: stable;
+}
+
+.playlist::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+.tracks_notFound {
+    color: #888;
+    padding: 40px 0;
+    text-align: center
+}

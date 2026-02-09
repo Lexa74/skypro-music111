@@ -1,0 +1,88 @@
+.wrapper {
+    position: relative;
+}
+
+/* КНОПКА */
+.button {
+    position: relative;
+    padding: 6px 20px;
+    border: 1px solid #ffffff;
+    border-radius: 60px;
+    background: transparent;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* АКТИВНАЯ КНОПКА */
+.active {
+    border-color: #B672FF;
+    color: #B672FF;
+}
+
+/* СЧЁТЧИК */
+.count {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: #B672FF;
+    color: #ffffff;
+    font-size: 12px;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ВЫПАДАШКА */
+.dropdown {
+    position: absolute;
+    top: 45px;
+    left: 0;
+    width: 288px;
+    background: #313131;
+    border-radius: 12px;
+    padding: 34px;
+    z-index: 10;
+    overflow: hidden;
+}
+
+/* СПИСОК */
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+
+    max-height: 180px;
+    overflow-y: auto;
+}
+
+.list::-webkit-scrollbar {
+    width: 4px;
+}
+
+/* ползунок */
+.list::-webkit-scrollbar-thumb {
+    background-color: #FFFFFF;
+    border-radius: 4px;
+}
+
+/* ЭЛЕМЕНТ */
+.item {
+    font-size: 20px;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.item:hover {
+    color: #B672FF;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+.itemSelected {
+    font-weight: bold;
+    color: #b672ff;
+}

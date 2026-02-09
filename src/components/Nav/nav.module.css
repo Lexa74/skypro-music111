@@ -1,0 +1,106 @@
+.nav {
+    width: 244px;
+    min-height: 100vh;
+    background-color: #181818;
+    padding: 20px 0 20px 36px;
+    box-sizing: border-box;
+}
+
+.logo {
+    width: 113.33px;
+    height: 43px;
+    padding: 13px 0;
+    margin-bottom: 40px;
+}
+
+.logoImage {
+    width: 113.33px;
+    height: 17px;
+}
+
+.burger:hover .burgerLine {
+    background-color: #ffffff;
+}
+
+.burger {
+    width: 20px;
+    height: 36px;
+    padding: 13px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.burgerLine {
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: #d3d3d3;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transform-origin: center;
+}
+
+.menuWrapper {
+    opacity: 0;
+    transition: opacity 0.6s ease 0.2s;
+}
+
+.menuWrapperOpen {
+    opacity: 1;
+}
+
+.menuList {
+    padding: 18px 0 10px 0;
+    margin: 0;
+    list-style: none;
+}
+
+.menuItem {
+    padding: 5px 0;
+    margin-bottom: 16px;
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: opacity 0.7s cubic-bezier(0.25, 0.8, 0.25, 1),
+    transform 0.7s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.menuWrapperOpen .menuItem:nth-child(1) { transition-delay: 0.25s; }
+.menuWrapperOpen .menuItem:nth-child(2) { transition-delay: 0.35s; }
+.menuWrapperOpen .menuItem:nth-child(3) { transition-delay: 0.45s; }
+
+.menuWrapperOpen .menuItem {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.menuLink {
+    color: #ffffff;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    text-align: left;
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    box-shadow: none;
+}
+
+.menuLink:focus-visible {
+    outline: none;
+}
+
+.menuLink:hover {
+    color: #B672FF;
+}
